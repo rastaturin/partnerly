@@ -1,0 +1,24 @@
+{
+  "name": "rastaturin/Partnerly",
+  "description": "SDK lib for the Partnerly",
+  "license": "MIT",
+  "keywords": ["partnerly"],
+  "authors": [
+    {
+      "name": "Alexey Rastaturin",
+      "email": "alexey.rastaturin@gmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "~6.0",
+    "aws/aws-sdk-php-resources": "^0.3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Partnerly\\": "src"
+    }
+  }
+}
