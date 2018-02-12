@@ -119,15 +119,15 @@ class Partnerly
     }
 
     /**
-     * @param $codeString
-     * @param $contextId
+     * @param string $codeString
+     * @param Context $context
      * @return mixed
      * @throws InvalidCodeException
      * @throws InvalidConnection
      * @throws NotFoundException
      */
-    public function getCodeUsage($codeString, $contextId) {
-        $request = sprintf("code-usage/%s/%s/%s", $this->partnerId, $codeString, $contextId);
+    public function getCodeUsage($codeString, Context $context) {
+        $request = sprintf("code-usage/%s/%s/%s", $this->partnerId, $codeString, $context->id);
         return $response = $this->sendGETRequest($request);
     }
     
@@ -141,7 +141,7 @@ class Partnerly
     public function getCode($codeString) {
         $request = sprintf("code/%s/%s", $this->partnerId, $codeString);
         $result = $this->sendGETRequest($request);
-        return new PromoCode($result['code']);
+        return new PromoCode($result);
     }
 
     /**
@@ -180,7 +180,7 @@ class Partnerly
     private function processResponse($result) {
         $statusCode = $result->getStatusCode();
         $response = $result->getBody()->getContents();
-        if ($statusCode == 200) {
+        if ($statusCode >= 200 && $statusCode < 300) {
             return json_decode($response, true);
         }
 

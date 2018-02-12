@@ -9,6 +9,7 @@ class PromoCode
     const REFERRAL = 'referral';
 
     const ACTION_ADDDAYS = 'addDays';
+    const ACTION_REFERRAL = 'referral';
 
     public $expiration;
     public $referral;
