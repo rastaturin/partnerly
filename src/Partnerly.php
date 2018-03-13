@@ -113,7 +113,11 @@ class Partnerly
             throw new NotApplicableException("The code has been used already.");
         }
 
-        $code = $this->getCode($codeString);
+        try {
+            $code = $this->getCode($codeString);
+        } catch (NotFoundException $ex) {
+            throw new NotFoundException(sprintf("Code [%s] not found.", $codeString));
+        }
         $this->validator->validate($code, $context);
         return $code;
     }
@@ -185,7 +189,7 @@ class Partnerly
         }
 
         if ($statusCode == 404) {
-            throw new NotFoundException();
+            throw new NotFoundException("Not found");
         }
 
         if ($statusCode == 400) {

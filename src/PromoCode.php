@@ -8,7 +8,7 @@ class PromoCode
     const VER = 'ver';
     const REFERRAL = 'referral';
 
-    const ACTION_ADDDAYS = 'addDays';
+    const ACTION_ADDDAYS = 'add-days';
     const ACTION_REFERRAL = 'referral';
 
     public $expiration;
@@ -29,6 +29,8 @@ class PromoCode
     public function __construct($data = [])
     {
         $this->populate($data);
+        $this->action = json_decode($this->action);
+        $this->conditions = json_decode($this->conditions);
     }
 
     /**
