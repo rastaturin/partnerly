@@ -83,6 +83,17 @@ class Partnerly
     }
 
     /**
+     * @param string $ip
+     * @return string
+     */
+    public function getCodeByIp($ip) {
+        $ip = urlencode($ip);
+        $response = $this->client->sendRequest('GET', "/code/view/$ip");
+        $result = json_decode($content = $response->getBody()->getContents(), true);
+        return $result['code'] ?? null;
+    }
+
+    /**
      * @param $code
      * @param $contextId
      * @return mixed
