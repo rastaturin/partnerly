@@ -40,6 +40,7 @@ class SecurityClient
 
         return $this->client->request($method, $uri, [
             'headers' => $headers,
+            'verify' => false,
             'json' => $data
         ]);
     }
