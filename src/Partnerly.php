@@ -88,7 +88,7 @@ class Partnerly
      */
     public function getCodeByIp($ip) {
         $ip = urlencode($ip);
-        $response = $this->client->sendRequest('GET', "/code/view/$ip");
+        $response = $this->client->sendRequest('GET', "code/view/$ip");
         $result = json_decode($content = $response->getBody()->getContents(), true);
         return $result['code'] ?? null;
     }
