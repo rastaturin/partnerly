@@ -69,14 +69,11 @@ class Partnerly
     /**
      * @param string $codeString
      * @param Context $context
+     * @param bool $skipValidation
      * @return PromoCode
-     * @throws InvalidCodeException
-     * @throws InvalidConnection
-     * @throws NotApplicableException
-     * @throws NotFoundException
      */
-    public function useCode($codeString, Context $context) {
-        $promoCode = $this->validate($codeString, $context);
+    public function useCode($codeString, Context $context, $skipValidation = false) {
+        $promoCode = $skipValidation ? $this->getCode($codeString) : $this->validate($codeString, $context);
         $this->useCodeRequest($codeString, $context->id);
         $this->applier->apply($promoCode, $context);
         return $promoCode;
@@ -97,11 +94,8 @@ class Partnerly
      * @param $code
      * @param $contextId
      * @return mixed
-     * @throws InvalidCodeException
-     * @throws InvalidConnection
-     * @throws NotFoundException
      */
-    private function useCodeRequest($code, $contextId)
+    public function useCodeRequest($code, $contextId)
     {
         return $this->sendPostRequest('code-usage', [
             'context' => $contextId,
@@ -145,7 +139,7 @@ class Partnerly
         $request = sprintf("code-usage/%s/%s/%s", $this->partnerId, $codeString, $context->id);
         return $response = $this->sendGETRequest($request);
     }
-    
+
     /**
      * @param string $codeString
      * @return PromoCode
