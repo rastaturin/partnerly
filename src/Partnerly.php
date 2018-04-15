@@ -108,7 +108,6 @@ class Partnerly
      * @param Context $context
      * @return null|PromoCode
      * @throws InvalidCodeException
-     * @throws InvalidConnection
      * @throws NotApplicableException
      * @throws NotFoundException
      */
@@ -131,9 +130,6 @@ class Partnerly
      * @param string $codeString
      * @param Context $context
      * @return mixed
-     * @throws InvalidCodeException
-     * @throws InvalidConnection
-     * @throws NotFoundException
      */
     public function getCodeUsage($codeString, Context $context) {
         $request = sprintf("code-usage/%s/%s/%s", $this->partnerId, $codeString, $context->id);
@@ -143,9 +139,6 @@ class Partnerly
     /**
      * @param string $codeString
      * @return PromoCode
-     * @throws InvalidCodeException
-     * @throws InvalidConnection
-     * @throws NotFoundException
      */
     public function getCode($codeString) {
         $request = sprintf("code/%s/%s", $this->partnerId, $codeString);
@@ -154,12 +147,8 @@ class Partnerly
     }
 
     /**
-     * @param $method
      * @param $request
      * @return mixed
-     * @throws InvalidCodeException
-     * @throws InvalidConnection
-     * @throws NotFoundException
      */
     private function sendGETRequest($request) {
         $result = $this->client->sendRequest(self::METHOD_GET, $request);
@@ -170,9 +159,6 @@ class Partnerly
      * @param string $uri
      * @param array $args
      * @return mixed
-     * @throws InvalidCodeException
-     * @throws InvalidConnection
-     * @throws NotFoundException
      */
     private function sendPostRequest($uri, $args) {
         $result = $this->client->sendRequest(self::METHOD_POST, $uri, $args);
