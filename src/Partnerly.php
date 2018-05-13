@@ -132,7 +132,7 @@ class Partnerly
      * @return mixed
      */
     public function getCodeUsage($codeString, Context $context) {
-        $request = sprintf("code-usage/%s/%s/%s", $this->partnerId, $codeString, $context->id);
+        $request = sprintf("code-usage/%s/%s/%s", $this->partnerId, urlencode($codeString), urlencode($context->id));
         return $response = $this->sendGETRequest($request);
     }
 
@@ -141,7 +141,7 @@ class Partnerly
      * @return PromoCode
      */
     public function getCode($codeString) {
-        $request = sprintf("code/%s/%s", $this->partnerId, $codeString);
+        $request = sprintf("code/%s/%s", $this->partnerId, urlencode($codeString));
         $result = $this->sendGETRequest($request);
         return new PromoCode($result);
     }
