@@ -151,9 +151,8 @@ class Partnerly
         $response = $this->client->sendRequest('POST', 'inner_referral', [
             'inner_id' => $inner_id,
         ]);
-        $statusCode = $response->getStatusCode();
-        $data = json_decode($content = $response->getBody()->getContents(), true);
-        return $data['referral'];
+        $data = $this->processResponse($response);
+        return $data['referral'] ?? null;
     }
 
     /**
