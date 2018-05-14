@@ -146,6 +146,16 @@ class Partnerly
         return new PromoCode($result);
     }
 
+    public function registerInnerReferral($inner_id)
+    {
+        $response = $this->client->sendRequest('POST', 'inner_referral', [
+            'inner_id' => $inner_id,
+        ]);
+        $statusCode = $response->getStatusCode();
+        $data = json_decode($content = $response->getBody()->getContents(), true);
+        return $data['referral'];
+    }
+
     /**
      * @param $request
      * @return mixed
