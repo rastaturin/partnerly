@@ -146,13 +146,26 @@ class Partnerly
         return new PromoCode($result);
     }
 
-    public function registerInnerReferral($inner_id)
+    public function registerInnerReferral($inner_id, $type)
     {
         $response = $this->client->sendRequest('POST', 'inner_referral', [
             'inner_id' => $inner_id,
+            'type' => $type,
         ]);
         $data = $this->processResponse($response);
-        return $data['referral'] ?? null;
+        return $data['code'] ?? null;
+    }
+
+    public function registerCustomCode($code, $type, $action, $conditions = "")
+    {
+        $response = $this->client->sendRequest('POST', 'code/custom', [
+            'code' => $code,
+            'type' => $type,
+            'action' => $action,
+            'conditions' => $conditions,
+        ]);
+        $data = $this->processResponse($response);
+        return $data['code'] ?? null;
     }
 
     /**
