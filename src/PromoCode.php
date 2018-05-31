@@ -7,6 +7,7 @@ class PromoCode
     const EXPIRE = 'expire';
     const VER = 'ver';
     const REFERRAL = 'referral';
+    const CUSTOMER_REFERRAL = 'customer_referral';
 
     const ACTION_ADDDAYS = 'add-days';
     const ACTION_REFERRAL = 'referral';
@@ -39,6 +40,11 @@ class PromoCode
     public function isReferral()
     {
         return $this->type == self::REFERRAL;
+    }
+
+    public function isCustomerReferral()
+    {
+        return $this->type == self::CUSTOMER_REFERRAL;
     }
 
     /**
