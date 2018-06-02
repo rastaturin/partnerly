@@ -156,7 +156,7 @@ class Partnerly
         return $data['code'] ?? null;
     }
 
-    public function registerCustomCode($code, $type, $description, $action, $conditions = "")
+    public function registerCustomCode($code, $type, $description, $action, $one_time = true, $conditions = "")
     {
         $response = $this->client->sendRequest('POST', 'code/custom', [
             'code' => $code,
@@ -164,6 +164,7 @@ class Partnerly
             'description' => $description,
             'action' => $action,
             'conditions' => $conditions,
+            'one_time' => $one_time,
         ]);
         $data = $this->processResponse($response);
         return $data['code'] ?? null;
