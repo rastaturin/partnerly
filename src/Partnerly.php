@@ -3,9 +3,9 @@
 namespace Partnerly;
 
 use GuzzleHttp\Client;
+use Partnerly\Exceptions\CodeUsedException;
 use Partnerly\Exceptions\InvalidCodeException;
 use Partnerly\Exceptions\InvalidConnection;
-use Partnerly\Exceptions\NotApplicableException;
 use Partnerly\Exceptions\NotFoundException;
 
 class Partnerly
@@ -72,8 +72,8 @@ class Partnerly
      * @param bool $skipValidation
      * @return PromoCode
      */
-    public function useCode($codeString, Context $context, $skipValidation = false) {
-        $promoCode = $skipValidation ? $this->getCode($codeString) : $this->validate($codeString, $context);
+    public function useCode($codeString, Context $context) {
+        $promoCode = $this->validate($codeString, $context);
         $this->useCodeRequest($codeString, $context->id);
         $this->applier->apply($promoCode, $context);
         return $promoCode;
@@ -104,24 +104,24 @@ class Partnerly
     }
 
     /**
-     * @param string $codeString
+     * @param string $code
      * @param Context $context
      * @return null|PromoCode
      * @throws InvalidCodeException
-     * @throws NotApplicableException
      * @throws NotFoundException
      */
-    public function validate($codeString, Context $context) {
-        $usage = $this->getCodeUsage($codeString, $context);
-        if (!empty($usage)) {
-            throw new NotApplicableException("The code has been used already.");
+    public function validate($code, Context $context) {
+        if (!$code instanceof PromoCode) {
+            try {
+                $code = $this->getCodeContext($code, $context->id);
+            } catch (NotFoundException $ex) {
+                throw new NotFoundException(sprintf("Code [%s] not found.", $code));
+            }
+        }
+        if ($code->used) {
+            throw new CodeUsedException("Code $code->code is already used on $code->used.");
         }
 
-        try {
-            $code = $this->getCode($codeString);
-        } catch (NotFoundException $ex) {
-            throw new NotFoundException(sprintf("Code [%s] not found.", $codeString));
-        }
         $this->validator->validate($code, $context);
         return $code;
     }
@@ -132,7 +132,7 @@ class Partnerly
      * @return mixed
      */
     public function getCodeUsage($codeString, Context $context) {
-        $request = sprintf("code-usage/%s/%s/%s", $this->partnerId, urlencode($codeString), urlencode($context->id));
+        $request = sprintf("code-usage/%s/%s/%s", urlencode($this->partnerId), urlencode($codeString), urlencode($context->id));
         return $response = $this->sendGETRequest($request);
     }
 
@@ -141,7 +141,13 @@ class Partnerly
      * @return PromoCode
      */
     public function getCode($codeString) {
-        $request = sprintf("code/%s/%s", $this->partnerId, urlencode($codeString));
+        $request = sprintf("code/%s/%s", urlencode($this->partnerId), urlencode($codeString));
+        $result = $this->sendGETRequest($request);
+        return new PromoCode($result);
+    }
+
+    public function getCodeContext($codeString, $context_id) {
+        $request = sprintf("context-code-usage/%s/%s", urlencode($codeString), urlencode($context_id));
         $result = $this->sendGETRequest($request);
         return new PromoCode($result);
     }
