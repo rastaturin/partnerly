@@ -22,6 +22,8 @@ class PromoCode
     public $conditions;
     public $action = [];
     public $description;
+    public $contextUsage = [];
+    public $referrals = [];
 
     /**
      * PromoCode constructor.
@@ -132,5 +134,15 @@ class PromoCode
     public function toArray()
     {
         return (array) $this;
+    }
+
+    public function getUser()
+    {
+        return is_array($this->referrals) ? $this->referrals[0]->user : null;
+    }
+
+    public function getInnerId()
+    {
+        return is_array($this->referrals) ? $this->referrals[0]->inner_id : null;
     }
 }
