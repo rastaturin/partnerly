@@ -138,11 +138,11 @@ class PromoCode
 
     public function getUser()
     {
-        return is_array($this->referrals) ? $this->referrals[0]->user : null;
+        return $this->referrals[0]['user'] ?? null;
     }
 
     public function getInnerId()
     {
-        return is_array($this->referrals) ? $this->referrals[0]->inner_id : null;
+        return $this->referrals[0]['inner_id'] ?? null;
     }
 }
