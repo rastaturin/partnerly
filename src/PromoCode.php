@@ -15,6 +15,7 @@ class PromoCode
     public $expiration;
     public $referral;
     public $used;
+    public $used_count;
     public $usage;
     public $usedCount;
     public $code;
