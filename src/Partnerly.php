@@ -198,8 +198,6 @@ class Partnerly
      * @return mixed
      */
     private function sendGETRequest($request) {
-        fwrite(STDERR, print_r($request, TRUE));
-
         $result = $this->client->sendRequest(self::METHOD_GET, $request);
         return $this->processResponse($result);
     }
