@@ -118,8 +118,9 @@ class Partnerly
                 throw new NotFoundException(sprintf("Code [%s] not found.", $code));
             }
         }
-        if ($code->used) {
-            throw new CodeUsedException("Code $code->code is already used on $code->used.");
+
+        if ($code->alreadyUsed()) {
+            throw new CodeUsedException("Code $code->code is already used.");
         }
 
         $this->validator->validate($code, $context);
@@ -139,14 +140,30 @@ class Partnerly
     /**
      * @param string $codeString
      * @return PromoCode
+     * @throws InvalidCodeException
      */
     public function getCode($codeString) {
+        if (!$codeString) {
+            throw new InvalidCodeException('Empty code');
+        }
         $request = sprintf("code/%s/%s", urlencode($this->partnerId), urlencode($codeString));
         $result = $this->sendGETRequest($request);
         return new PromoCode($result);
     }
 
+    /**
+     * @param string $codeString
+     * @param string $context_id
+     * @return PromoCode
+     * @throws InvalidCodeException
+     */
     public function getCodeContext($codeString, $context_id) {
+        if (!$codeString) {
+            throw new InvalidCodeException('Empty code');
+        }
+        if (!$context_id) {
+            throw new InvalidCodeException('Empty context');
+        }
         $request = sprintf("context-code-usage/%s/%s", urlencode($codeString), urlencode($context_id));
         $result = $this->sendGETRequest($request);
         return new PromoCode($result);
@@ -181,6 +198,8 @@ class Partnerly
      * @return mixed
      */
     private function sendGETRequest($request) {
+        fwrite(STDERR, print_r($request, TRUE));
+
         $result = $this->client->sendRequest(self::METHOD_GET, $request);
         return $this->processResponse($result);
     }

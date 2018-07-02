@@ -20,11 +20,12 @@ class PromoCode
     public $usedCount;
     public $code;
     public $type;
-    public $conditions;
+    public $conditions = [];
     public $action = [];
     public $description;
     public $contextUsage = [];
     public $referrals = [];
+    public $one_time = false;
 
     /**
      * PromoCode constructor.
@@ -139,11 +140,16 @@ class PromoCode
 
     public function getUser()
     {
-        return $this->referrals[0]['user'] ?? null;
+        return $this->referral['user'] ?? null;
     }
 
     public function getInnerId()
     {
-        return $this->referrals[0]['inner_id'] ?? null;
+        return $this->referral['inner_id'] ?? null;
+    }
+
+    public function alreadyUsed()
+    {
+        return $this->used || ($this->used_count && $this->one_time);
     }
 }
