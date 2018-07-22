@@ -169,11 +169,12 @@ class Partnerly
         return new PromoCode($result);
     }
 
-    public function registerInnerReferral($inner_id, $type)
+    public function registerInnerReferral($inner_id, $type, $uid = null)
     {
         $response = $this->client->sendRequest('POST', 'inner_referral', [
             'inner_id' => $inner_id,
             'type' => $type,
+            'uid' => $uid,
         ]);
         $data = $this->processResponse($response);
         return $data['code'] ?? null;
