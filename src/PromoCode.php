@@ -148,6 +148,11 @@ class PromoCode
         return $this->referral['inner_id'] ?? null;
     }
 
+    public function getUid()
+    {
+        return $this->referral['uid'] ?? null;
+    }
+
     public function alreadyUsed()
     {
         return $this->used || ($this->used_count && $this->one_time);
