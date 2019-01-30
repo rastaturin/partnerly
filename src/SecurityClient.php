@@ -3,8 +3,6 @@
 namespace Partnerly;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Psr7\Request;
-use Psr\Http\Message\RequestInterface;
 
 class SecurityClient
 {

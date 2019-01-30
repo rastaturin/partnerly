@@ -69,12 +69,12 @@ class Partnerly
     /**
      * @param string $codeString
      * @param Context $context
-     * @param bool $skipValidation
+     * @param array $extra
      * @return PromoCode
      */
-    public function useCode($codeString, Context $context) {
+    public function useCode($codeString, Context $context, $extra = null) {
         $promoCode = $this->validate($codeString, $context);
-        $this->useCodeRequest($codeString, $context->id);
+        $this->useCodeRequest($codeString, $context->id, $extra);
         $this->applier->apply($promoCode, $context);
         return $promoCode;
     }
@@ -93,13 +93,15 @@ class Partnerly
     /**
      * @param $code
      * @param $contextId
+     * @param $extra
      * @return mixed
      */
-    public function useCodeRequest($code, $contextId)
+    public function useCodeRequest($code, $contextId, $extra = null)
     {
         return $this->sendPostRequest('code-usage', [
             'context' => $contextId,
             'code' => $code,
+            'extra' => json_encode($extra),
         ]);
     }
 
